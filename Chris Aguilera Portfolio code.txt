@@ -1,0 +1,483 @@
+﻿import React, { useState, useEffect } from 'react';
+import { 
+  BarChart3, 
+  Cpu, 
+  Globe, 
+  ShieldCheck, 
+  Mail, 
+  Linkedin, 
+  Github, 
+  Briefcase, 
+  GraduationCap, 
+  ChevronRight, 
+  Truck, 
+  Zap, 
+  Phone,
+  FileText,
+  Download,
+  Layout,
+  MapPin,
+  Printer
+} from 'lucide-react';
+
+
+const App = () => {
+  const [activeTab, setActiveTab] = useState('portfolio');
+  const [scrolled, setScrolled] = useState(false);
+  const [isPrinting, setIsPrinting] = useState(false);
+
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+
+  // Effect to trigger print after the tab transition is complete
+  useEffect(() => {
+    if (isPrinting && activeTab === 'resume') {
+      const timer = setTimeout(() => {
+        window.print();
+        setIsPrinting(false);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isPrinting, activeTab]);
+
+
+  const handlePrint = (e) => {
+    if (e) e.preventDefault();
+    setIsPrinting(true);
+    if (activeTab !== 'resume') {
+      setActiveTab('resume');
+    }
+  };
+
+
+  const scrollToContact = () => {
+    if (activeTab !== 'portfolio') {
+      setActiveTab('portfolio');
+      setTimeout(() => {
+        document.getElementById('contact-section')?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    } else {
+      document.getElementById('contact-section')?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+
+  // Content Data
+  const stats = [
+    { label: 'Capital Recovered', value: '$642K+', icon: <Zap className="text-blue-400" /> },
+    { label: 'Cycle Time Reduction', value: '40%', icon: <BarChart3 className="text-emerald-400" /> },
+    { label: 'Experience', value: '15+ Yrs', icon: <Briefcase className="text-purple-400" /> },
+    { label: 'Audit Readiness', value: '100%', icon: <ShieldCheck className="text-orange-400" /> },
+  ];
+
+
+  const experience = [
+    {
+      company: 'CATALYST BRANDS (SPARC GROUP)',
+      role: 'Assistant Supply Chain Manager / Regional Ops Lead',
+      period: '2023 - Present',
+      description: 'Regional Operations Lead for a $9B Retail Portfolio (Lucky Brand, Aéropostale, Nautica).',
+      bullets: [
+        'Recovered $642k in working capital by engineering custom API middleware to resolve asynchronous data failures between ERP modules.',
+        'Architected custom LLM-integrated workflows to automate technical documentation and SDLC requirements (SOC2 compliance).',
+        'Optimized NetSuite ERP workflows via SQL and BRD translation, reducing monthly reporting cycles by 40%.',
+        'Increased inventory throughput by 22% via automated data validation protocols and system logic integration.',
+        'Managed port-to-DC lifecycle for LA/Long Beach hubs serving an 1,800-store network and 60M annual customers.'
+      ]
+    },
+    {
+      company: 'MERCEDES-BENZ USA',
+      role: 'Supply Chain Operations Specialist / Site Support Lead',
+      period: '2015 - 2023',
+      description: 'Lead for Automotive Parts Distribution and Site Support.',
+      bullets: [
+        'Managed a $6M annual contract and $2.6M facility budget; reduced lead times by 25%, yielding $50K in annual savings.',
+        'Primary SAP "Power User", correcting MRP planning logic errors to prevent stock-outs during global disruptions.',
+        'Lead Hazmat Coordinator (0 incidents over 8 years) managing EV Lithium-Ion logistics and fire/safety certifications.',
+        'Coached front-line staff to increase productivity by 40% and ensured 100% readiness for federal audits.'
+      ]
+    },
+    {
+      company: 'MONSTER ENERGY CORPORATION',
+      role: 'Direct Sales Distribution Rep',
+      period: '2010 - 2014',
+      bullets: [
+        'Recovered $525,000 in disputed claims through SAP invoice resolution and data validation.',
+        'Led Southwest region to a 15% revenue increase through data-driven territory management.'
+      ]
+    }
+  ];
+
+
+  const skillGroups = [
+    {
+      title: 'AI & Systems',
+      icon: <Cpu size={20} />,
+      skills: ['NetSuite (Expert)', 'SAP (S/4HANA & ECC)', 'SQL', 'API Middleware', 'Custom LLM Workflows', 'Agentic Analytics']
+    },
+    {
+      title: 'Logistics & Ops',
+      icon: <Truck size={20} />,
+      skills: ['Port-to-DC Lifecycle', '3PL Auditing', 'SIOP Planning', 'Global Sourcing', 'Warehouse Logic Integration']
+    },
+    {
+      title: 'Compliance',
+      icon: <ShieldCheck size={20} />,
+      skills: ['SOC2 Readiness', 'ITAR / C-TPAT', 'Hazmat (IATA/IMDG)', 'SDLC Governance', 'Vendor Compliance Strategy']
+    }
+  ];
+
+
+  const ResumeView = () => (
+    <div className="max-w-4xl mx-auto bg-white text-slate-900 shadow-2xl p-8 md:p-12 my-12 print:my-0 print:shadow-none print:p-0 rounded-sm overflow-hidden border border-slate-200 print:border-none animate-in fade-in zoom-in-95 duration-300">
+      <header className="border-b-2 border-slate-900 pb-6 mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+        <div>
+          <h1 className="text-4xl font-black tracking-tighter uppercase">Christopher Aguilera</h1>
+          <p className="text-xl font-bold text-slate-600">Sr. Manager, Parts Procurement & Supplier Relations</p>
+        </div>
+        <div className="text-right text-sm font-medium space-y-1">
+          <p className="flex items-center justify-end gap-2"><MapPin size={14}/> San Bernardino, CA 92407</p>
+          <p className="flex items-center justify-end gap-2 text-blue-600"><Mail size={14}/> christopher.thaddeus.aguilera@gmail.com</p>
+          <p className="flex items-center justify-end gap-2"><Phone size={14}/> (909) 380-2833</p>
+        </div>
+      </header>
+
+
+      <section className="mb-8">
+        <h2 className="text-lg font-black uppercase border-b border-slate-300 mb-3 tracking-widest bg-slate-50 px-2 py-1">Executive Summary</h2>
+        <p className="text-sm leading-relaxed text-slate-700">
+          Senior supply chain leader with over 15 years of experience specializing in digital-physical integration and supplier relations. 
+          Proven track record of aligning warehouse operations with ERP workflows to recover $642K in working capital and reduce reporting cycles by 40%. 
+          Skilled in vendor negotiation, procurement process optimization, and implementing AI-driven compliance solutions for 100% data integrity and SOC2 readiness.
+        </p>
+      </section>
+
+
+      <section className="mb-8">
+        <h2 className="text-lg font-black uppercase border-b border-slate-300 mb-3 tracking-widest bg-slate-50 px-2 py-1">Technical Core Competencies</h2>
+        <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-xs">
+          <div><span className="font-bold">Data & Systems:</span> NetSuite ERP Optimization, API Middleware, SQL, SDLC & SOC2</div>
+          <div><span className="font-bold">AI & Automation:</span> Custom LLM Workflows, Agentic Analytics, Data Validation</div>
+          <div><span className="font-bold">Logistics:</span> Port-to-DC Lifecycle, 3PL Auditing, SIOP Planning, Global Sourcing</div>
+          <div><span className="font-bold">Regulatory:</span> ITAR, C-TPAT, Hazmat (IATA/IMDG), CA Transparency Act</div>
+        </div>
+      </section>
+
+
+      <section className="mb-8">
+        <h2 className="text-lg font-black uppercase border-b border-slate-300 mb-4 tracking-widest bg-slate-50 px-2 py-1">Professional Experience</h2>
+        <div className="space-y-6">
+          {experience.map((job, i) => (
+            <div key={i} className="break-inside-avoid">
+              <div className="flex justify-between font-bold text-sm mb-1 uppercase">
+                <span>{job.company}</span>
+                <span>{job.period}</span>
+              </div>
+              <div className="italic text-slate-600 text-xs mb-2">{job.role}</div>
+              <ul className="list-disc ml-5 text-xs space-y-1 text-slate-700">
+                {job.bullets.map((b, bi) => <li key={bi}>{b}</li>)}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+
+
+      <section className="break-inside-avoid">
+        <h2 className="text-lg font-black uppercase border-b border-slate-300 mb-3 tracking-widest bg-slate-50 px-2 py-1">Education</h2>
+        <div className="flex justify-between text-sm">
+          <span className="font-bold">California State University, San Bernardino</span>
+          <span>Bachelor of Arts, Communications</span>
+        </div>
+      </section>
+    </div>
+  );
+
+
+  return (
+    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-blue-500/30">
+      {/* Enhanced CSS for high-quality print output */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        @media print {
+          @page { size: portrait; margin: 1cm; }
+          body { background: white !important; color: black !important; }
+          .print\\:hidden, nav, footer, button, .tab-switcher { display: none !important; }
+          main { padding: 0 !important; margin: 0 !important; }
+          .shadow-2xl, .border { border: none !important; box-shadow: none !important; }
+          .bg-slate-950, .bg-slate-900, .bg-slate-900\\/50, .bg-slate-900\\/30 { background: white !important; }
+          .animate-in { animation: none !important; opacity: 1 !important; }
+          header { border-bottom: 2pt solid black !important; }
+          h2 { background-color: #f8fafc !important; -webkit-print-color-adjust: exact; }
+        }
+      `}} />
+
+
+      {/* Navigation */}
+      <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-slate-950/80 backdrop-blur-md border-b border-slate-800 py-3' : 'bg-transparent py-6'} print:hidden`}>
+        <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="flex items-center gap-2 group cursor-pointer" onClick={() => { setActiveTab('portfolio'); window.scrollTo({top: 0, behavior: 'smooth'}); }}>
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-lg flex items-center justify-center font-bold text-xl shadow-lg shadow-blue-900/20 group-hover:scale-105 transition-transform">
+              CA
+            </div>
+            <span className="font-bold tracking-tight text-xl hidden lg:block">CHRISTOPHER AGUILERA</span>
+          </div>
+
+
+          {/* Tab Switcher */}
+          <div className="flex bg-slate-900/50 p-1 rounded-xl border border-slate-800 tab-switcher">
+            <button 
+              onClick={() => setActiveTab('portfolio')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === 'portfolio' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}
+            >
+              <Layout size={16}/>
+              Portfolio
+            </button>
+            <button 
+              onClick={() => setActiveTab('resume')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === 'resume' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}
+            >
+              <FileText size={16}/>
+              Resume
+            </button>
+          </div>
+
+
+          <div className="flex items-center gap-4">
+            <div className="hidden sm:flex items-center gap-4 mr-4">
+              <a href="mailto:christopher.thaddeus.aguilera@gmail.com" className="p-2 hover:text-blue-400 transition-colors" title="Email"><Mail size={18}/></a>
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="p-2 hover:text-blue-400 transition-colors" title="LinkedIn"><Linkedin size={18}/></a>
+              <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="p-2 hover:text-blue-400 transition-colors" title="GitHub"><Github size={18}/></a>
+            </div>
+            <button 
+              onClick={handlePrint}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all shadow-lg active:scale-95 ${isPrinting ? 'bg-blue-400 text-white' : 'bg-slate-100 text-slate-950 hover:bg-white'}`}
+            >
+              <Printer size={16} className={isPrinting ? 'animate-pulse' : ''}/>
+              <span className="hidden xs:inline">{isPrinting ? 'Preparing...' : 'Print / Save PDF'}</span>
+              <span className="xs:hidden">PDF</span>
+            </button>
+          </div>
+        </div>
+      </nav>
+
+
+      {/* Main Content */}
+      <main className="pt-24 md:pt-32">
+        {activeTab === 'portfolio' ? (
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
+            {/* Hero Section */}
+            <section className="pb-20 px-6">
+              <div className="container mx-auto max-w-6xl">
+                <div className="flex flex-col lg:flex-row items-center gap-12">
+                  <div className="flex-1 space-y-6 text-center lg:text-left">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-medium">
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                      </span>
+                      Senior Supply Chain Leader
+                    </div>
+                    <h1 className="text-5xl lg:text-7xl font-extrabold tracking-tight leading-[1.1]">
+                      Bridging the <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Digital-Physical</span> Gap.
+                    </h1>
+                    <p className="text-xl text-slate-400 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                      15+ years experience specializing in digital-physical integration, ERP optimization, and AI-driven compliance. Recovering capital and automating logistics.
+                    </p>
+                    <div className="flex flex-wrap justify-center lg:justify-start gap-4 pt-4">
+                      <button 
+                        onClick={scrollToContact}
+                        className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all shadow-lg shadow-blue-900/20 flex items-center gap-2 group"
+                      >
+                        Contact Christopher
+                        <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform"/>
+                      </button>
+                      <button 
+                        onClick={() => setActiveTab('resume')}
+                        className="px-8 py-4 bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-200 font-semibold rounded-xl transition-all flex items-center gap-2"
+                      >
+                        <FileText size={18}/>
+                        View Full Resume
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <div className="flex-1 w-full lg:max-w-md">
+                    <div className="grid grid-cols-2 gap-4">
+                      {stats.map((stat, idx) => (
+                        <div key={idx} className="bg-slate-900/50 border border-slate-800 p-6 rounded-2xl hover:border-blue-500/30 transition-all group">
+                          <div className="mb-3">{stat.icon}</div>
+                          <div className="text-2xl font-bold group-hover:text-blue-400 transition-colors">{stat.value}</div>
+                          <div className="text-xs text-slate-500 uppercase tracking-wider font-semibold">{stat.label}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+
+            {/* Core Competencies Bento */}
+            <section id="core-tech" className="py-20 bg-slate-900/30">
+              <div className="container mx-auto px-6 max-w-6xl">
+                <div className="mb-12">
+                  <h2 className="text-3xl font-bold mb-4">Technical Architecture</h2>
+                  <p className="text-slate-400 max-w-xl">Deep expertise in enterprise systems combined with modern AI engineering.</p>
+                </div>
+
+
+                <div className="grid md:grid-cols-3 gap-6">
+                  {skillGroups.map((group, idx) => (
+                    <div key={idx} className="bg-slate-950 border border-slate-800 p-8 rounded-3xl relative overflow-hidden group hover:border-blue-500/50 transition-all">
+                      <div className="absolute -right-4 -top-4 text-slate-900 group-hover:text-blue-500/10 transition-colors">
+                        {React.cloneElement(group.icon, { size: 120 })}
+                      </div>
+                      <div className="relative z-10">
+                        <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center text-blue-500 mb-6">
+                          {group.icon}
+                        </div>
+                        <h3 className="text-xl font-bold mb-6">{group.title}</h3>
+                        <div className="space-y-3">
+                          {group.skills.map((skill, sIdx) => (
+                            <div key={sIdx} className="flex items-center gap-3 text-slate-400">
+                              <div className="w-1.5 h-1.5 rounded-full bg-blue-500/50"></div>
+                              {skill}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+
+            {/* Experience Section */}
+            <section className="py-24 px-6">
+              <div className="container mx-auto max-w-4xl">
+                <div className="text-center mb-16">
+                  <h2 className="text-4xl font-bold mb-4">Professional Trajectory</h2>
+                  <p className="text-slate-400 italic">Leading operations for world-class brands including Mercedes-Benz & Monster Energy.</p>
+                </div>
+
+
+                <div className="space-y-12 relative before:absolute before:left-[17px] before:top-2 before:bottom-2 before:w-[2px] before:bg-slate-800">
+                  {experience.map((exp, idx) => (
+                    <div key={idx} className="relative pl-12 group">
+                      <div className="absolute left-0 top-1 w-9 h-9 bg-slate-950 border-2 border-slate-800 rounded-full flex items-center justify-center z-10 group-hover:border-blue-500 transition-colors">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                      </div>
+                      <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-2">
+                        <h3 className="text-2xl font-bold text-white group-hover:text-blue-400 transition-colors">{exp.company}</h3>
+                        <span className="px-3 py-1 bg-slate-900 border border-slate-800 rounded-full text-sm font-mono text-slate-400">
+                          {exp.period}
+                        </span>
+                      </div>
+                      <div className="text-blue-500 font-medium mb-4">{exp.role}</div>
+                      {exp.description && <p className="text-slate-300 mb-4">{exp.description}</p>}
+                      <ul className="space-y-3">
+                        {exp.bullets.map((bullet, bIdx) => (
+                          <li key={bIdx} className="flex gap-3 text-slate-400 leading-relaxed">
+                            <span className="text-blue-500 mt-1.5">•</span>
+                            {bullet}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          </div>
+        ) : (
+          <div className="px-6 pb-20">
+            <ResumeView />
+          </div>
+        )}
+      </main>
+
+
+      {/* Footer / Contact Section */}
+      <footer id="contact-section" className="bg-slate-900/50 border-t border-slate-800 py-20 px-6 print:hidden">
+        <div className="container mx-auto max-w-6xl">
+          <div className="grid md:grid-cols-2 gap-16 items-start">
+            <div>
+              <h2 className="text-3xl font-bold mb-8">Education & Foundation</h2>
+              <div className="flex items-start gap-6 p-6 bg-slate-950 rounded-2xl border border-slate-800">
+                <div className="w-12 h-12 bg-indigo-500/10 rounded-xl flex items-center justify-center text-indigo-400 flex-shrink-0">
+                  <GraduationCap size={24} />
+                </div>
+                <div>
+                  <h4 className="text-xl font-bold">California State University, San Bernardino</h4>
+                  <p className="text-slate-400">Bachelor of Arts, Communications</p>
+                  <p className="text-sm text-slate-500 mt-2 italic">Specialization in Cross-Functional Leadership & Software Development Bridging</p>
+                </div>
+              </div>
+              
+              <div className="mt-8 flex flex-wrap gap-3">
+                {['Defensive Engineering', 'SQL', 'NetSuite Expert', 'SOC2 Compliance', 'IATA/IMDG', 'Lean Operations'].map((tag, i) => (
+                  <span key={i} className="px-4 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs font-semibold text-slate-400 uppercase tracking-widest">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+
+            <div className="bg-blue-600 rounded-3xl p-10 text-white relative overflow-hidden shadow-2xl shadow-blue-500/20">
+              <div className="absolute top-0 right-0 p-8 opacity-10">
+                <Mail size={120} />
+              </div>
+              <h3 className="text-3xl font-bold mb-4">Let's connect.</h3>
+              <p className="text-blue-100 mb-8 max-w-md">
+                Available for strategic leadership roles in supply chain systems, digital transformation, and technical operations.
+              </p>
+              <div className="space-y-4">
+                <a href="mailto:christopher.thaddeus.aguilera@gmail.com" className="flex items-center gap-4 group">
+                  <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center group-hover:bg-white group-hover:text-blue-600 transition-all">
+                    <Mail size={20} />
+                  </div>
+                  <div>
+                    <div className="text-xs text-blue-200 font-bold uppercase tracking-wider">Email</div>
+                    <div className="font-semibold underline underline-offset-4 decoration-blue-300">christopher.thaddeus.aguilera@gmail.com</div>
+                  </div>
+                </a>
+                <a href="tel:+19093802833" className="flex items-center gap-4 group">
+                  <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center group-hover:bg-white group-hover:text-blue-600 transition-all">
+                    <Phone size={20} />
+                  </div>
+                  <div>
+                    <div className="text-xs text-blue-200 font-bold uppercase tracking-wider">Phone</div>
+                    <div className="font-semibold underline underline-offset-4 decoration-blue-300">(909) 380-2833</div>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+          
+          <div className="mt-20 pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4 text-slate-500 text-sm">
+            <p>© 2026 Christopher Aguilera. Senior Supply Chain Systems & Operations Leader.</p>
+            <div className="flex gap-6 items-center">
+              <button onClick={handlePrint} className="hover:text-blue-400 flex items-center gap-2 underline decoration-slate-800 underline-offset-4 transition-colors group">
+                <Download size={14} className="group-hover:translate-y-0.5 transition-transform"/> Download Resume (PDF)
+              </button>
+              <div className="flex gap-4">
+                 <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors"><Linkedin size={18}/></a>
+                 <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors"><Github size={18}/></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+
+export default App;
